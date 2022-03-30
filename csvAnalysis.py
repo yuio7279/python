@@ -1,7 +1,7 @@
 # 1. csv 파일 불러와 셋팅하기
 import os, re, usecsv
-os.chdir(r'C:/Users/super/pythonData_workspace/school 2_1/0330')
-total = usecsv.opencsv('popSeoul2.csv')
+os.chdir(r'D:\gitPY\0330')
+total = usecsv.opencsv('popSeoul.csv')
 newPop = usecsv.switch(total)
 # print(newPop[:4])
 

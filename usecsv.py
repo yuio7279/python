@@ -2,7 +2,7 @@ import re
 import csv
 
 def opencsv(filename):
-    f= open(filename, 'r', encoding='euc-kr')
+    f= open(filename, 'r', encoding='utf8')
     reader = csv.reader(f)
     output = []
     for i in reader:

@@ -1,5 +1,5 @@
 import os, re
-os.chdir(r"C:\Users\super\Desktop\2-B_KYS\python_workspace\0330")
+os.chdir(r"D:\gitPY\0330")
 import usecsv 
 apt = usecsv.switch(usecsv.opencsv('apt_trade.csv'))
 print(apt[:3])
