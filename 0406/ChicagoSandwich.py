@@ -8,17 +8,19 @@ nameList = []
 rankList = []
 priceList = []
 urlList = []
+s_urlList = []          
+
 
 try:
     urlTicker = Request('https://www.chicagomag.com/chicago-magazine/november-2020/sandwich-city/the-10-best-sandwiches/', headers={'User-Agent':'Mozilla/5.0'})
     readTicker = urlopen(urlTicker)
     soup = bs(readTicker, 'html.parser')
     
-    for link in soup.find_all('figcaption'):               
+    for figcaption in soup.findAll('figcaption'):               
         try:
-            menuList.append(link.find('strong').getText())   #메뉴 가져오는 부분입니다
+            menuList.append(figcaption.find('strong').getText())   #메뉴 가져오는 부분입니다
 
-            h2 = (link.findAll('h2'))                        
+            h2 = figcaption.findAll('h2')                        
             rankList.append(h2[0].getText())                 #랭킹 가져오는 부분입니다
             nameList.append(h2[1].getText())                 #매장명 가져오는 부분입니다.
 
@@ -30,27 +32,31 @@ try:
     for em in soup.findAll('em'):
         try:
             s_string = em.getText().split()
-            addr = s_string[1]+' '+s_string[2]+' '+s_string[3]+' '+s_string[4]
-            
-            addr = addr.rstrip(';').rstrip('.')
-            urlList.append(addr)
+            addr = s_string[1]+' '+s_string[2]+' '+s_string[3]+' '+s_string[4]      #주소 구하는 부분입니다
+
+            urlList.append(addr.rstrip(';').rstrip('.'))
+            priceList.append(s_string[0].rstrip('.'))   
 
 
-            priceList.append(s_string[0].rstrip('.'))
-        except AttributeError:
-            continue
+            if len(s_string) > 5:                                                 #주소가 2개인 매장 분류입니다
+                second_addr = s_string[5]+' '+s_string[6]+' '+s_string[7]+' '+s_string[8]
+                s_urlList.append(second_addr.rstrip(';').rstrip('.'))
+            else:
+                s_urlList.append(None)                                              #주소가 1개면 주소2리스트에 None 추가
+
+        
         except IndexError:
             continue
 
 
 except HTTPError:
-    print('error')
+    print('HTTPError')
 
 
 #showList 함수 정의
 def showList():
     for i in range(0,10,1):
-        print('[순위] : ',rankList[i],'\t[카페명] : ',nameList[i],'\t[메뉴명] : ',menuList[i],'\t[주소] : ',urlList[i],'[가격] : ',priceList[i])
+        print('[순위] : ',rankList[i],' [카페명] : ',nameList[i],'[메뉴명] : ',menuList[i],'[가격] : ',priceList[i],'[주소] : ',urlList[i],'[주소2] : ',s_urlList[i])
 
 
 showList()
@@ -62,6 +68,7 @@ showList()
 data = {}
 data['카페명'] = nameList
 data['주소'] = urlList
+data['주소2'] = s_urlList
 data['가격'] = priceList
 
 df = pd.DataFrame(data , index = rankList)
