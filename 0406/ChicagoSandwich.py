@@ -24,7 +24,7 @@ try:
             rankList.append(h2[0].getText())                 #랭킹 가져오는 부분입니다
             nameList.append(h2[1].getText())                 #매장명 가져오는 부분입니다.
 
-        except AttributeError:
+        except AttributeError:                          #figcaption의 첫번째 리턴값의 strong, h2태그가 없는것을 처리
             continue                                         
 
 
@@ -45,7 +45,7 @@ try:
                 s_urlList.append(None)                                              #주소가 1개면 주소2리스트에 None 추가
 
         
-        except IndexError:
+        except IndexError:                                              #s_string[4]까지 담기지 않는 경우
             continue
 
 
@@ -69,8 +69,10 @@ data = {}
 data['카페명'] = nameList
 data['주소'] = urlList
 data['주소2'] = s_urlList
+data['메뉴명'] = menuList
 data['가격'] = priceList
-
+                                                        #encoding='euc-kr' > \xe9 error > utf-8 > 한글깨짐 > utf-8-sig
+                                                        #\xe9 : 악센트 부호가 붙은 문자열  
 df = pd.DataFrame(data , index = rankList)
-df.index.name = '순위'
-df.to_csv("sandwiches.csv",mode="w",encoding='euc-kr')
+df.index.name = '순위'                                      
+df.to_csv("sandwiches.csv",mode="w",encoding='utf-8-sig')       
