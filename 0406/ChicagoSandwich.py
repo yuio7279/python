@@ -40,7 +40,7 @@ try:
 
             if len(s_string) > 5:                                                 #주소가 2개인 매장 분류입니다
                 second_addr = s_string[5]+' '+s_string[6]+' '+s_string[7]+' '+s_string[8]
-                s_urlList.append(second_addr.rstrip(';').rstrip('.'))
+                s_urlList.append(second_addr.rstrip('.'))
             else:
                 s_urlList.append(None)                                              #주소가 1개면 주소2리스트에 None 추가
 
@@ -72,7 +72,7 @@ data['주소2'] = s_urlList
 data['메뉴명'] = menuList
 data['가격'] = priceList
                                                         #encoding='euc-kr' > \xe9 error > utf-8 > 한글깨짐 > utf-8-sig
-                                                        #\xe9 : 악센트 부호가 붙은 문자열  
+                                                        #\xe9 : 악센트 부호가 붙은 문자열
 df = pd.DataFrame(data , index = rankList)
 df.index.name = '순위'                                      
 df.to_csv("sandwiches.csv",mode="w",encoding='utf-8-sig')       
